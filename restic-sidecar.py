@@ -11,7 +11,7 @@ listen_port = os.environ.get('RSC_LISTEN_PORT','9000')
 metrics_prefix = os.environ.get('RSC_METRICS_PREFIX','rsc')
 retention_policy = os.environ.get('RSC_RETENTION','1')
 backup_paths = os.environ.get('RSC_BACKUP_PATHS','')
-backup_key = os.environ.get('RSC_BACKUP_KEY', 'bla')
+backup_key = os.environ.get('RSC_BACKUP_KEY', '')
 
 ## -- Backup Functions --
 def backupCycle(paths,keep_daily):
