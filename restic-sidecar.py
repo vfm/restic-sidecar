@@ -3,6 +3,7 @@ import json
 import socket
 import bottle
 import restic
+import threading
 import dateutil.parser
 
 listen_address = os.environ.get('RSC_LISTEN_ADDRESS','0.0.0.0')
@@ -12,19 +13,12 @@ retention_policy = os.environ.get('RSC_RETENTION','1')
 backup_paths = os.environ.get('RSC_BACKUP_PATHS','')
 backup_key = os.environ.get('RSC_BACKUP_KEY', 'bla')
 
-# RESTIC_REPOSITORY
-# RESTIC_PASSWORD
-# AWS_ACCESS_KEY_ID
-# AWS_SECRET_ACCESS_KEY
-
 ## -- Backup Functions --
-def createBackup(paths):
-  re = restic.backup(paths=paths.split(','))
-  return re
-
-def cleanIndex(keep_daily):
-  re = restic.forget(prune=True,keep_daily=keep_daily)
-  return re
+def backupCycle(paths,keep_daily):
+  response = dict()
+  response['backup'] = restic.backup(paths=paths.split(','))
+  response['forget'] = restic.forget(prune=True,keep_daily=keep_daily)
+  print(json.dumps(response,indent = 2))
 
 ## -- Metric Functions --
 def formatMetric(name,value,prefix = metrics_prefix,labels = None):
@@ -88,14 +82,11 @@ def metrics():
 def backup():
   bottle.response.content_type = 'text/plain'
   key = bottle.request.query.key
-  
   if key and key == backup_key:
     try:
-      response = dict()
-      response['backup'] = createBackup(backup_paths)
-      response['forget'] = cleanIndex(retention_policy)
+      cycle = threading.Thread(target=backupCycle(backup_paths,retention_policy), name="backupCycle")
+      cycle.start()
       bottle.response.status = 200
-      print(json.dumps(response,indent = 2))
       return 'Backup Started'
     except Exception as error:
       bottle.response.status = 500
@@ -105,9 +96,7 @@ def backup():
     bottle.response.status = 500
     return 'Unauthorized'
 
-
 ## -- Runtime --
-
 # Init Restic Repo
 try:
   restic.init()
