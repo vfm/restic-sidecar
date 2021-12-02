@@ -100,10 +100,9 @@ def backup():
 # Init Restic Repo
 try:
   restic.init()
-except restic.errors.ResticFailedError:
-  print('Info: Repo already initialized')
+except restic.errors.ResticFailedError as e:
+  if not str('config file already exists') in str(e):
+    raise Exception(e)
 
 # Run Webserver
 bottle.run(host=listen_address, port=listen_port)
-
-
