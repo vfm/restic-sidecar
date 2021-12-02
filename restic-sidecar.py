@@ -68,13 +68,11 @@ def index():
 # Metrics
 @bottle.route('/metrics')
 def metrics():
+  bottle.response.content_type = 'text/plain'
   outputlist = generateMetrics()
-
   output = str()
   for i in outputlist:
     output += str(i) + "\n"
-  
-  bottle.response.content_type = 'text/plain'
   return output
 
 # Backup
@@ -102,7 +100,7 @@ try:
   restic.init()
 except restic.errors.ResticFailedError as e:
   if not str('config file already exists') in str(e):
-    raise Exception(e)
+    raise e
 
 # Run Webserver
 bottle.run(host=listen_address, port=listen_port)
