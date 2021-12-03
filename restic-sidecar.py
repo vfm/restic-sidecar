@@ -99,7 +99,7 @@ def backup():
 try:
   restic.init()
 except restic.errors.ResticFailedError as e:
-  if not str('config file already exists') in str(e):
+  if not str('already exists') or not str('already initialized') in str(e):
     raise e
 
 # Run Webserver
