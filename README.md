@@ -13,6 +13,13 @@ Configuration is done solely via Environment Variables
 | `RSC_PACKUP_PATHS` | `true` | Comma separated list of paths that should be backed up eg. `/var/lib/data2,/var/lib/data2` | `''` |
 | `RSC_BACKUP_KEY` | `true` | Key that is required to trigger Backups | `''` |
 
+Furthermore, Restic it self is also configured via Environment Variables, see https://restic.readthedocs.io/en/stable/040_backup.html#environment-variables  
+
+|Name|Required|Description|Default|
+|---|---|---|---|
+|`RESTIC_REPOSITORY`|`true`| Location of the Repository |`''`|
+|`RESTIC_PASSWORD`|`true`| The actual password for the repository |`''`|
+
 ## Endpoints
 ### /metrics
 Prints Metrics about Snapshots and Restic Repo statistics in OpenMetricsformat.  
