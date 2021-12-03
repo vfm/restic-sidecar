@@ -17,7 +17,7 @@ backup_key = os.environ.get('RSC_BACKUP_KEY', '')
 def backupCycle(paths,keep_daily):
   response = dict()
   response['backup'] = restic.backup(paths=paths.split(','))
-  response['forget'] = restic.forget(prune=True,keep_daily=keep_daily)
+  response['forget'] = restic.forget(prune=True,keep_daily=keep_daily,group_by='host')
   print(json.dumps(response,indent = 2))
 
 ## -- Metric Functions --
