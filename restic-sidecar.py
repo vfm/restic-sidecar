@@ -81,15 +81,10 @@ def backup():
   bottle.response.content_type = 'text/plain'
   key = bottle.request.query.key
   if key and key == backup_key:
-    try:
-      cycle = threading.Thread(target=backupCycle(backup_paths,retention_policy), name="backupCycle")
-      cycle.start()
-      bottle.response.status = 200
-      return 'Backup Started'
-    except Exception as error:
-      bottle.response.status = 500
-      print(error)
-      return 'Error'
+    cycle = threading.Thread(target=backupCycle(backup_paths,retention_policy), name="backupCycle")
+    cycle.start()
+    bottle.response.status = 200
+    return 'Started - See logs for Details'
   else:
     bottle.response.status = 500
     return 'Unauthorized'
