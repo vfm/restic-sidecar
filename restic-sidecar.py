@@ -26,9 +26,9 @@ def formatMetric(name,value,prefix = metrics_prefix,labels = None):
     labelstrings = list()
     for l_key,l_value in labels.items():
       labelstrings.append( l_key + "=\"" + l_value + "\"")
-    return str( prefix + "_" + name + "{" + ','.join(labelstrings) + "}: " + str(value))
+    return str( prefix + "_" + name + "{" + ','.join(labelstrings) + "} " + str(value))
   else:
-    return str( prefix + "_" + name + ": " + str(value) )
+    return str( prefix + "_" + name + " " + str(value) )
 
 def generateMetrics():
   metrics = list()
