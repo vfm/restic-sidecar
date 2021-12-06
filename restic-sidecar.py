@@ -35,10 +35,10 @@ def generateMetrics():
 
   # Snapshots
   myhostname = socket.gethostname()
-  snaps = [ i for i in restic.snapshots() if i['hostname'] == myhostname ]
-  last_snap = snaps[-1]
+  mysnaps = [ i for i in restic.snapshots() if i['hostname'] == myhostname ]
+  last_snap = mysnaps[-1]
   metrics.append(formatMetric("last_snapshot_time",dateutil.parser.parse(last_snap['time']).timestamp(), labels={"snapshot_id": last_snap['short_id']}))
-  metrics.append(formatMetric("snapshot_count", sum(i['hostname'] == myhostname for i in restic.snapshots())))
+  metrics.append(formatMetric("snapshot_count", len(mysnaps)))
 
   # Restore Statistics
   restorestats = restic.stats(mode='restore-size')
