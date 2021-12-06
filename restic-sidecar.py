@@ -73,6 +73,7 @@ def metrics():
   output = str()
   for i in outputlist:
     output += str(i) + "\n"
+  bottle.response.status = 200
   return output
 
 # Backup
